@@ -3,6 +3,7 @@ import React, {useCallback, useContext, useEffect, useRef, useState} from "react
 import PropTypes, {oneOfType} from "prop-types";
 import {Row} from "react-bootstrap";
 import LoadingIcons from "react-loading-icons";
+import track, { useTracking } from 'react-tracking';
 
 import {THEME_STATES} from "../ThemeContext/THEME_STATES";
 import {ThemeContext} from "../ThemeContext/ThemeContext";
@@ -44,6 +45,8 @@ export function Viewer ({fileInfo, prettifyLog, logEventNumber, timestamp}) {
 
     // Logger used to track of all loading messages and state transitions
     const msgLogger = useRef(new MessageLogger());
+
+    const { trackEvent } = useTracking();
 
     // Callbacks for adding and clearing folding ranges
     const addFolding = useRef(undefined);
@@ -111,6 +114,7 @@ export function Viewer ({fileInfo, prettifyLog, logEventNumber, timestamp}) {
 
     // Load file if file info changes (this could happen from drag and drop)
     useEffect(() => {
+        trackEvent({ event: "load-file" })
         loadFile(fileInfo);
     }, [fileInfo]);
 
